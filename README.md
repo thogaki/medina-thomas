@@ -1,18 +1,14 @@
-# Medina & Thomas – Save the Date
+# Medina & Thomas – Save the Date V3
 
-Fertige statische Website für den 05.06.2027.
+Diese Version setzt die Namen genau wie gewünscht untereinander:
 
-## Veröffentlichung über GitHub Pages
-1. Neues öffentliches GitHub-Repository erstellen, z. B. `medina-thomas`.
-2. Alle Dateien aus diesem Ordner in das Repository hochladen.
-3. Unter Settings → Pages bei "Build and deployment" `Deploy from a branch` auswählen.
-4. Branch `main` und Ordner `/ (root)` auswählen und speichern.
-5. Unter Settings → Pages bei "Custom domain" `medina-thomas.de` eintragen.
+Medina  
+&  
+Thomas
 
-## STRATO-DNS
-Die exakten DNS-Einträge hängen vom GitHub-Benutzernamen ab. GitHub zeigt die nötigen Werte in den Pages-Einstellungen an.
-Für die Hauptdomain werden normalerweise vier A-Records zu GitHub Pages gesetzt, für `www` ein CNAME.
-
-## Datenschutz
-Keine Analyse- oder Trackingdienste eingebaut. Google Fonts werden aktuell extern geladen.
-Für vollständige externe Ressourcenfreiheit können die Schriftarten später lokal ersetzt werden.
+## Hochladen
+1. ZIP entpacken.
+2. In `thogaki/medina-thomas` auf **Add file → Upload files**.
+3. Alle Dateien hochladen.
+4. Vorhandene Dateien ersetzen.
+5. **Commit changes**.
