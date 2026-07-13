@@ -110,7 +110,7 @@ let stars = [];
 let shootingStars = [];
 let dpr = Math.min(window.devicePixelRatio || 1, 2);
 let lastLaunch = 0;
-let nextLaunchIn = 1600;
+let nextLaunchIn = 6500;
 
 /*
   Der Sternenhimmel ist bewusst an euer Beziehungsdatum 06.04.2019 gekoppelt.
@@ -153,22 +153,27 @@ function resizeStars() {
 }
 
 function launchShootingStar() {
-  const fromRight = random() > 0.2;
+  const fromRight = random() > 0.18;
 
   shootingStars.push({
-    x: fromRight ? innerWidth * (0.55 + random() * 0.5) : innerWidth * (0.15 + random() * 0.35),
-    y: innerHeight * (0.01 + random() * 0.45),
-    vx: fromRight ? -(6.8 + random() * 4) : 5.8 + random() * 3.4,
-    vy: 2.5 + random() * 2.2,
-    length: 75 + random() * 80,
-    life: 1,
-    width: 0.8 + random() * 1
+    x: fromRight
+      ? innerWidth * (0.62 + random() * 0.34)
+      : innerWidth * (0.08 + random() * 0.24),
+    y: innerHeight * (0.04 + random() * 0.34),
+    vx: fromRight
+      ? -(2.6 + random() * 1.5)
+      : 2.4 + random() * 1.4,
+    vy: 1.0 + random() * 0.9,
+    length: 48 + random() * 42,
+    life: 0.62,
+    width: 0.55 + random() * 0.45
   });
 
-  if (random() > 0.45) {
+  // Nur selten folgt eine zweite Sternschnuppe.
+  if (random() > 0.90) {
     setTimeout(() => {
-      if (shootingStars.length < 6) launchShootingStar();
-    }, 180 + random() * 650);
+      if (shootingStars.length < 2) launchShootingStar();
+    }, 900 + random() * 1200);
   }
 }
 
@@ -186,21 +191,21 @@ function drawStars(t) {
   if (t - lastLaunch > nextLaunchIn) {
     launchShootingStar();
     lastLaunch = t;
-    nextLaunchIn = 2200 + random() * 3200;
+    nextLaunchIn = 7500 + random() * 7000;
   }
 
   shootingStars = shootingStars.filter((star) => {
     star.x += star.vx;
     star.y += star.vy;
-    star.life -= 0.022;
+    star.life -= 0.010;
 
     const direction = star.vx < 0 ? 1 : -1;
     const endX = star.x + star.length * direction;
     const endY = star.y - star.length * 0.42;
 
     const gradient = ctx.createLinearGradient(star.x, star.y, endX, endY);
-    gradient.addColorStop(0, `rgba(255,246,211,${Math.max(0, star.life)})`);
-    gradient.addColorStop(0.25, `rgba(231,204,104,${Math.max(0, star.life * 0.9)})`);
+    gradient.addColorStop(0, `rgba(255,246,211,${Math.max(0, star.life * 0.72)})`);
+    gradient.addColorStop(0.30, `rgba(231,204,104,${Math.max(0, star.life * 0.48)})`);
     gradient.addColorStop(1, "rgba(255,245,205,0)");
 
     ctx.beginPath();

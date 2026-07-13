@@ -233,28 +233,42 @@ h1 b {
 }
 
 .scroll-hint {
-  width: 42px;
-  height: 42px;
-  margin: 12px auto 0;
-  display: grid;
-  place-items: center;
-  opacity: .95;
-  transition: opacity .3s ease;
+  position: relative !important;
+  inset: auto !important;
+  width: 74px;
+  min-height: 54px;
+  margin: 14px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  opacity: .88;
+  transition: opacity .3s ease, transform .3s ease;
 }
 
 .scroll-hint.hidden {
   opacity: 0;
+  transform: translateY(-5px);
   pointer-events: none;
 }
 
-.scroll-hint span {
-  width: 18px;
-  height: 18px;
+.scroll-label {
+  color: rgba(231,204,104,.72);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: .28em;
+  text-indent: .28em;
+}
+
+.scroll-chevron {
+  width: 15px;
+  height: 15px;
   border-right: 2px solid var(--gold);
   border-bottom: 2px solid var(--gold);
   transform: rotate(45deg);
-  animation: hintArrow 1.55s ease-in-out infinite;
-  filter: drop-shadow(0 0 8px rgba(231,204,104,.30));
+  animation: hintArrow 1.9s ease-in-out infinite;
+  filter: drop-shadow(0 0 7px rgba(231,204,104,.20));
 }
 
 .message,
@@ -440,7 +454,7 @@ footer {
   }
 
   .scroll-hint {
-    margin-top: 10px;
+    margin-top: 12px;
   }
 
   .message {
@@ -506,5 +520,24 @@ footer {
   *, *::before, *::after {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
+  }
+}
+
+
+/* V6: verhindert zuverlässig großen Leerraum aus älteren Browser-Caches/Regeln */
+.hero {
+  min-height: auto !important;
+  height: auto !important;
+}
+
+.hero-inner {
+  min-height: 0 !important;
+}
+
+@media (max-width: 620px) {
+  .hero {
+    min-height: auto !important;
+    height: auto !important;
+    padding-bottom: 4px;
   }
 }
