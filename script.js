@@ -112,6 +112,25 @@ let dpr = Math.min(window.devicePixelRatio || 1, 2);
 let lastLaunch = 0;
 let nextLaunchIn = 1600;
 
+/*
+  Der Sternenhimmel ist bewusst an euer Beziehungsdatum 06.04.2019 gekoppelt.
+  Das ist ein reproduzierbares, symbolisches Muster – keine astronomische
+  Rekonstruktion des echten Himmels an einem bestimmten Ort.
+*/
+function seededRandom(seed) {
+  let value = seed >>> 0;
+  return function () {
+    value += 0x6D2B79F5;
+    let t = value;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const relationshipSeed = 6042019;
+const random = seededRandom(relationshipSeed);
+
 function resizeStars() {
   dpr = Math.min(window.devicePixelRatio || 1, 2);
   canvas.width = Math.floor(innerWidth * dpr);
@@ -121,33 +140,35 @@ function resizeStars() {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   const count = Math.max(100, Math.floor((innerWidth * innerHeight) / 8500));
+  const localRandom = seededRandom(relationshipSeed + innerWidth * 31 + innerHeight * 17);
+
   stars = Array.from({ length: count }, () => ({
-    x: Math.random() * innerWidth,
-    y: Math.random() * innerHeight,
-    r: Math.random() * 1.35 + 0.18,
-    a: Math.random() * 0.64 + 0.12,
-    v: Math.random() * 0.012 + 0.004,
-    phase: Math.random() * Math.PI * 2
+    x: localRandom() * innerWidth,
+    y: localRandom() * innerHeight,
+    r: localRandom() * 1.35 + 0.18,
+    a: localRandom() * 0.64 + 0.12,
+    v: localRandom() * 0.012 + 0.004,
+    phase: localRandom() * Math.PI * 2
   }));
 }
 
 function launchShootingStar() {
-  const fromRight = Math.random() > 0.2;
+  const fromRight = random() > 0.2;
 
   shootingStars.push({
-    x: fromRight ? innerWidth * (0.55 + Math.random() * 0.5) : innerWidth * (0.15 + Math.random() * 0.35),
-    y: innerHeight * (0.01 + Math.random() * 0.45),
-    vx: fromRight ? -(6.8 + Math.random() * 4) : 5.8 + Math.random() * 3.4,
-    vy: 2.5 + Math.random() * 2.2,
-    length: 75 + Math.random() * 80,
+    x: fromRight ? innerWidth * (0.55 + random() * 0.5) : innerWidth * (0.15 + random() * 0.35),
+    y: innerHeight * (0.01 + random() * 0.45),
+    vx: fromRight ? -(6.8 + random() * 4) : 5.8 + random() * 3.4,
+    vy: 2.5 + random() * 2.2,
+    length: 75 + random() * 80,
     life: 1,
-    width: 0.8 + Math.random() * 1
+    width: 0.8 + random() * 1
   });
 
-  if (Math.random() > 0.45) {
+  if (random() > 0.45) {
     setTimeout(() => {
       if (shootingStars.length < 6) launchShootingStar();
-    }, 180 + Math.random() * 650);
+    }, 180 + random() * 650);
   }
 }
 
@@ -165,7 +186,7 @@ function drawStars(t) {
   if (t - lastLaunch > nextLaunchIn) {
     launchShootingStar();
     lastLaunch = t;
-    nextLaunchIn = 2200 + Math.random() * 3200;
+    nextLaunchIn = 2200 + random() * 3200;
   }
 
   shootingStars = shootingStars.filter((star) => {

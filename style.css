@@ -91,13 +91,12 @@ main, footer {
 
 .hero {
   position: relative;
-  min-height: 100svh;
   display: grid;
   place-items: start center;
   padding:
     calc(88px + env(safe-area-inset-top))
     18px
-    52px;
+    18px;
 }
 
 .hero-inner {
@@ -234,15 +233,12 @@ h1 b {
 }
 
 .scroll-hint {
-  position: absolute;
-  left: 50%;
-  bottom: max(12px, env(safe-area-inset-bottom));
   width: 42px;
   height: 42px;
-  transform: translateX(-50%);
+  margin: 12px auto 0;
   display: grid;
   place-items: center;
-  opacity: .9;
+  opacity: .95;
   transition: opacity .3s ease;
 }
 
@@ -258,7 +254,7 @@ h1 b {
   border-bottom: 2px solid var(--gold);
   transform: rotate(45deg);
   animation: hintArrow 1.55s ease-in-out infinite;
-  filter: drop-shadow(0 0 8px rgba(231,204,104,.28));
+  filter: drop-shadow(0 0 8px rgba(231,204,104,.30));
 }
 
 .message,
@@ -269,24 +265,24 @@ h1 b {
 }
 
 .message {
-  min-height: 58svh;
+  min-height: 52svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 62px 0;
+  padding: 44px 0 52px;
 }
 
 .heart {
-  margin-bottom: 30px;
+  margin-bottom: 26px;
   color: var(--gold);
   font-family: serif;
-  font-size: 56px;
+  font-size: 52px;
   line-height: 1;
   animation: heartbeat 3s ease-in-out infinite;
 }
 
 .message p {
-  margin: 0 auto 17px;
+  margin: 0 auto 16px;
   max-width: 700px;
   color: var(--text);
   font-size: clamp(16px, 2.1vw, 21px);
@@ -295,7 +291,7 @@ h1 b {
 }
 
 .calendar {
-  padding: 62px 0 94px;
+  padding: 56px 0 84px;
   scroll-margin-top: 76px;
 }
 
@@ -385,18 +381,15 @@ footer {
   }
 
   .hero {
-    min-height: 100svh;
     padding-top: calc(82px + env(safe-area-inset-top));
-    padding-bottom: 48px;
+    padding-bottom: 8px;
   }
 
   .hero-inner {
     width: min(520px, 100%);
   }
 
-  .eyebrow {
-    margin-top: 4px;
-  }
+  .eyebrow { margin-top: 4px; }
 
   h1 {
     margin-top: 16px;
@@ -418,9 +411,7 @@ footer {
     width: min(270px, 60%);
   }
 
-  .marry {
-    font-size: 10px;
-  }
+  .marry { font-size: 10px; }
 
   .date-card {
     margin-top: 19px;
@@ -437,9 +428,7 @@ footer {
     font-size: 26px;
   }
 
-  .countdown div {
-    padding: 0 4px;
-  }
+  .countdown div { padding: 0 4px; }
 
   .countdown strong {
     font-size: clamp(28px, 8vw, 35px);
@@ -451,21 +440,21 @@ footer {
   }
 
   .scroll-hint {
-    bottom: max(8px, env(safe-area-inset-bottom));
+    margin-top: 10px;
   }
 
   .message {
-    min-height: 62svh;
-    padding: 68px 0 58px;
+    min-height: 54svh;
+    padding: 42px 0 50px;
   }
 
   .heart {
-    margin-bottom: 28px;
-    font-size: 52px;
+    margin-bottom: 24px;
+    font-size: 48px;
   }
 
   .calendar {
-    padding-top: 64px;
+    padding-top: 56px;
   }
 }
 
@@ -487,15 +476,10 @@ footer {
   }
 }
 
-@media (max-height: 740px) and (max-width: 620px) {
-  .hero {
-    min-height: 760px;
-  }
-}
-
 @media (min-width: 900px) {
   .hero {
     padding-top: 84px;
+    padding-bottom: 10px;
   }
 
   .hero-inner {
@@ -510,6 +494,10 @@ footer {
     max-width: 560px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .message {
+    min-height: 44svh;
   }
 }
 
