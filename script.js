@@ -7,13 +7,33 @@ const parts = {
   seconds: document.getElementById("seconds"),
 };
 
+function animateValue(element, nextValue) {
+  if (element.textContent === nextValue) return;
+
+  element.classList.add("changing");
+
+  window.setTimeout(() => {
+    element.textContent = nextValue;
+    element.classList.remove("changing");
+    element.classList.remove("entering");
+    void element.offsetWidth;
+    element.classList.add("entering");
+  }, 180);
+
+  window.setTimeout(() => {
+    element.classList.remove("entering");
+  }, 540);
+}
+
 function updateCountdown() {
   const now = new Date();
   let diff = weddingDate.getTime() - now.getTime();
 
   if (diff <= 0) {
-    Object.values(parts).forEach((el) => (el.textContent = "00"));
-    parts.days.textContent = "0";
+    animateValue(parts.days, "0");
+    animateValue(parts.hours, "00");
+    animateValue(parts.minutes, "00");
+    animateValue(parts.seconds, "00");
     return;
   }
 
@@ -24,26 +44,25 @@ function updateCountdown() {
   const minutes = Math.floor(diff / 60000);
   const seconds = Math.floor((diff % 60000) / 1000);
 
-  parts.days.textContent = String(days);
-  parts.hours.textContent = String(hours).padStart(2, "0");
-  parts.minutes.textContent = String(minutes).padStart(2, "0");
-  parts.seconds.textContent = String(seconds).padStart(2, "0");
+  animateValue(parts.days, String(days));
+  animateValue(parts.hours, String(hours).padStart(2, "0"));
+  animateValue(parts.minutes, String(minutes).padStart(2, "0"));
+  animateValue(parts.seconds, String(seconds).padStart(2, "0"));
 }
 
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-// Google Calendar – bewusst ohne Ort.
 const googleParams = new URLSearchParams({
   action: "TEMPLATE",
   text: "Hochzeit Medina & Thomas",
   dates: "20270605/20270606",
   details: "Save the Date – weitere Informationen folgen mit der Einladung."
 });
+
 document.getElementById("google-link").href =
   "https://calendar.google.com/calendar/render?" + googleParams.toString();
 
-// Apple / Outlook / iPhone: lokale ICS-Datei.
 document.getElementById("ics-button").addEventListener("click", () => {
   const ics = [
     "BEGIN:VCALENDAR",
@@ -75,12 +94,23 @@ document.getElementById("ics-button").addEventListener("click", () => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
-// Dezenter Sternenhimmel ohne externe Bibliothek.
+const scrollHint = document.querySelector(".top-scroll-hint");
+
+function updateScrollHint() {
+  scrollHint.classList.toggle("hidden", window.scrollY > 120);
+}
+
+updateScrollHint();
+window.addEventListener("scroll", updateScrollHint, { passive: true });
+
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
+
 let stars = [];
+let shootingStars = [];
 let dpr = Math.min(window.devicePixelRatio || 1, 2);
-let shootingStar = null;
+let lastLaunch = 0;
+let nextLaunchIn = 1800;
 
 function resizeStars() {
   dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -90,70 +120,86 @@ function resizeStars() {
   canvas.style.height = innerHeight + "px";
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  const count = Math.max(55, Math.floor((innerWidth * innerHeight) / 15000));
+  const count = Math.max(90, Math.floor((innerWidth * innerHeight) / 9500));
   stars = Array.from({ length: count }, () => ({
     x: Math.random() * innerWidth,
     y: Math.random() * innerHeight,
-    r: Math.random() * 1.25 + 0.2,
-    a: Math.random() * 0.55 + 0.15,
+    r: Math.random() * 1.35 + 0.18,
+    a: Math.random() * 0.62 + 0.12,
     v: Math.random() * 0.012 + 0.004,
     phase: Math.random() * Math.PI * 2
   }));
 }
 
 function launchShootingStar() {
-  shootingStar = {
-    x: innerWidth * (0.55 + Math.random() * 0.35),
-    y: innerHeight * (0.05 + Math.random() * 0.25),
-    life: 1
-  };
-  setTimeout(launchShootingStar, 9000 + Math.random() * 13000);
+  const fromRight = Math.random() > 0.22;
+
+  shootingStars.push({
+    x: fromRight ? innerWidth * (0.55 + Math.random() * 0.5) : innerWidth * (0.2 + Math.random() * 0.35),
+    y: innerHeight * (0.02 + Math.random() * 0.42),
+    vx: fromRight ? -(6.5 + Math.random() * 3.8) : 5.8 + Math.random() * 3.2,
+    vy: 2.4 + Math.random() * 2.2,
+    length: 70 + Math.random() * 70,
+    life: 1,
+    width: 0.8 + Math.random() * 0.9
+  });
+
+  if (Math.random() > 0.58) {
+    setTimeout(() => {
+      if (shootingStars.length < 5) launchShootingStar();
+    }, 220 + Math.random() * 700);
+  }
 }
 
 function drawStars(t) {
   ctx.clearRect(0, 0, innerWidth, innerHeight);
 
-  stars.forEach((s) => {
-    const alpha = s.a + Math.sin(t * s.v + s.phase) * 0.18;
+  for (const s of stars) {
+    const alpha = s.a + Math.sin(t * s.v + s.phase) * 0.2;
     ctx.beginPath();
     ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(245,229,170,${Math.max(0.05, alpha)})`;
     ctx.fill();
-  });
+  }
 
-  if (shootingStar) {
-    shootingStar.x -= 7;
-    shootingStar.y += 3;
-    shootingStar.life -= 0.025;
+  if (t - lastLaunch > nextLaunchIn) {
+    launchShootingStar();
+    lastLaunch = t;
+    nextLaunchIn = 2600 + Math.random() * 3800;
+  }
 
-    const gradient = ctx.createLinearGradient(
-      shootingStar.x,
-      shootingStar.y,
-      shootingStar.x + 90,
-      shootingStar.y - 38
-    );
-    gradient.addColorStop(0, `rgba(255,245,205,${shootingStar.life})`);
+  shootingStars = shootingStars.filter((star) => {
+    star.x += star.vx;
+    star.y += star.vy;
+    star.life -= 0.022;
+
+    const direction = star.vx < 0 ? 1 : -1;
+    const endX = star.x + star.length * direction;
+    const endY = star.y - star.length * 0.42;
+
+    const gradient = ctx.createLinearGradient(star.x, star.y, endX, endY);
+    gradient.addColorStop(0, `rgba(255,246,211,${Math.max(0, star.life)})`);
+    gradient.addColorStop(0.25, `rgba(231,204,104,${Math.max(0, star.life * 0.9)})`);
     gradient.addColorStop(1, "rgba(255,245,205,0)");
 
     ctx.beginPath();
-    ctx.moveTo(shootingStar.x, shootingStar.y);
-    ctx.lineTo(shootingStar.x + 90, shootingStar.y - 38);
+    ctx.moveTo(star.x, star.y);
+    ctx.lineTo(endX, endY);
     ctx.strokeStyle = gradient;
-    ctx.lineWidth = 1.2;
+    ctx.lineWidth = star.width;
     ctx.stroke();
 
-    if (shootingStar.life <= 0) shootingStar = null;
-  }
+    return star.life > 0;
+  });
 
   requestAnimationFrame(drawStars);
 }
 
 resizeStars();
-addEventListener("resize", resizeStars, { passive: true });
+window.addEventListener("resize", resizeStars, { passive: true });
 
 if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
   requestAnimationFrame(drawStars);
-  setTimeout(launchShootingStar, 4500);
 } else {
   drawStars(0);
 }
