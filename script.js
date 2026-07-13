@@ -18,11 +18,11 @@ function animateValue(element, nextValue) {
     element.classList.remove("entering");
     void element.offsetWidth;
     element.classList.add("entering");
-  }, 180);
+  }, 170);
 
   window.setTimeout(() => {
     element.classList.remove("entering");
-  }, 540);
+  }, 500);
 }
 
 function updateCountdown() {
@@ -94,10 +94,10 @@ document.getElementById("ics-button").addEventListener("click", () => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
-const scrollHint = document.querySelector(".top-scroll-hint");
+const scrollHint = document.querySelector(".scroll-hint");
 
 function updateScrollHint() {
-  scrollHint.classList.toggle("hidden", window.scrollY > 120);
+  scrollHint.classList.toggle("hidden", window.scrollY > 80);
 }
 
 updateScrollHint();
@@ -110,7 +110,7 @@ let stars = [];
 let shootingStars = [];
 let dpr = Math.min(window.devicePixelRatio || 1, 2);
 let lastLaunch = 0;
-let nextLaunchIn = 1800;
+let nextLaunchIn = 1600;
 
 function resizeStars() {
   dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -120,34 +120,34 @@ function resizeStars() {
   canvas.style.height = innerHeight + "px";
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  const count = Math.max(90, Math.floor((innerWidth * innerHeight) / 9500));
+  const count = Math.max(100, Math.floor((innerWidth * innerHeight) / 8500));
   stars = Array.from({ length: count }, () => ({
     x: Math.random() * innerWidth,
     y: Math.random() * innerHeight,
     r: Math.random() * 1.35 + 0.18,
-    a: Math.random() * 0.62 + 0.12,
+    a: Math.random() * 0.64 + 0.12,
     v: Math.random() * 0.012 + 0.004,
     phase: Math.random() * Math.PI * 2
   }));
 }
 
 function launchShootingStar() {
-  const fromRight = Math.random() > 0.22;
+  const fromRight = Math.random() > 0.2;
 
   shootingStars.push({
-    x: fromRight ? innerWidth * (0.55 + Math.random() * 0.5) : innerWidth * (0.2 + Math.random() * 0.35),
-    y: innerHeight * (0.02 + Math.random() * 0.42),
-    vx: fromRight ? -(6.5 + Math.random() * 3.8) : 5.8 + Math.random() * 3.2,
-    vy: 2.4 + Math.random() * 2.2,
-    length: 70 + Math.random() * 70,
+    x: fromRight ? innerWidth * (0.55 + Math.random() * 0.5) : innerWidth * (0.15 + Math.random() * 0.35),
+    y: innerHeight * (0.01 + Math.random() * 0.45),
+    vx: fromRight ? -(6.8 + Math.random() * 4) : 5.8 + Math.random() * 3.4,
+    vy: 2.5 + Math.random() * 2.2,
+    length: 75 + Math.random() * 80,
     life: 1,
-    width: 0.8 + Math.random() * 0.9
+    width: 0.8 + Math.random() * 1
   });
 
-  if (Math.random() > 0.58) {
+  if (Math.random() > 0.45) {
     setTimeout(() => {
-      if (shootingStars.length < 5) launchShootingStar();
-    }, 220 + Math.random() * 700);
+      if (shootingStars.length < 6) launchShootingStar();
+    }, 180 + Math.random() * 650);
   }
 }
 
@@ -165,7 +165,7 @@ function drawStars(t) {
   if (t - lastLaunch > nextLaunchIn) {
     launchShootingStar();
     lastLaunch = t;
-    nextLaunchIn = 2600 + Math.random() * 3800;
+    nextLaunchIn = 2200 + Math.random() * 3200;
   }
 
   shootingStars = shootingStars.filter((star) => {
