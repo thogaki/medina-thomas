@@ -1,12 +1,14 @@
 :root {
-  --navy: #02003f;
-  --navy-deep: #010026;
-  --purple: #2e1456;
-  --gold: #e7cc68;
-  --gold-soft: #f3e2a4;
-  --ivory: #fffaf0;
-  --text: rgba(255,255,255,.80);
-  --line: rgba(231,204,104,.55);
+  --pastel-light: #C5D4EB;
+  --pastel-deep: #A7AED3;
+  --navy: #1f3150;
+  --navy-deep: #0f1d33;
+  --purple: #A7AED3;
+  --gold: #f0d9a6;
+  --gold-soft: #fff0c9;
+  --ivory: #fffdf8;
+  --text: rgba(255,255,255,.88);
+  --line: rgba(240,217,166,.60);
 }
 
 * { box-sizing: border-box; }
@@ -22,8 +24,9 @@ body {
   overflow-x: hidden;
   color: var(--ivory);
   background:
-    radial-gradient(circle at 82% 16%, rgba(46,20,86,.34), transparent 34rem),
-    linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+    radial-gradient(circle at 82% 14%, rgba(197,212,235,.24), transparent 28rem),
+    radial-gradient(circle at 18% 36%, rgba(167,174,211,.18), transparent 24rem),
+    linear-gradient(180deg, #243a5a 0%, #1f3150 34%, #172844 68%, #0f1d33 100%);
   font-family: "Montserrat", system-ui, sans-serif;
 }
 
@@ -53,7 +56,7 @@ button { font: inherit; }
     calc(12px + env(safe-area-inset-top))
     max(18px, calc((100vw - 1040px) / 2))
     10px;
-  background: linear-gradient(180deg, rgba(2,0,63,.96), rgba(2,0,63,.66), transparent);
+  background: linear-gradient(180deg, rgba(15,29,51,.96), rgba(31,49,80,.72), transparent);
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
 }
@@ -171,7 +174,7 @@ h1 b {
   padding: 21px 24px 20px;
   border: 1px solid rgba(231,204,104,.60);
   border-radius: 24px;
-  background: linear-gradient(145deg, rgba(46,20,86,.16), rgba(2,0,63,.40));
+  background: linear-gradient(145deg, rgba(255,255,255,.24), rgba(167,174,211,.30));
   box-shadow: inset 0 1px 0 rgba(255,255,255,.03), 0 18px 48px rgba(0,0,0,.14);
 }
 
@@ -338,13 +341,13 @@ h1 b {
 }
 
 .button-primary {
-  color: #080630;
-  background: linear-gradient(120deg, #f5e4a7, #cfad50);
+  color: #26384a;
+  background: linear-gradient(120deg, #fff1c9, #dec489);
 }
 
 .button-secondary {
   color: var(--ivory);
-  background: rgba(10,6,54,.50);
+  background: rgba(167,174,211,.34);
 }
 
 .calendar-note {
@@ -396,7 +399,7 @@ footer {
 
   .hero {
     padding-top: calc(82px + env(safe-area-inset-top));
-    padding-bottom: 8px;
+    padding-bottom: 4px;
   }
 
   .hero-inner {
@@ -523,8 +526,7 @@ footer {
   }
 }
 
-
-/* V6: verhindert zuverlässig großen Leerraum aus älteren Browser-Caches/Regeln */
+/* V1.0: verhindert zuverlässig großen Leerraum aus älteren Browser-Caches/Regeln */
 .hero {
   min-height: auto !important;
   height: auto !important;
@@ -540,4 +542,78 @@ footer {
     height: auto !important;
     padding-bottom: 4px;
   }
+}
+
+
+/* V1.1 Pastellblau */
+.date-card,
+.button,
+.save-top {
+  box-shadow: 0 12px 36px rgba(91,99,145,.16);
+}
+
+.date-card {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.heart,
+.ornament i {
+  filter: drop-shadow(0 0 8px rgba(240,217,166,.18));
+}
+
+
+/* V1.1.1 – Zweifarbige Pastellpalette */
+.date-card {
+  background: linear-gradient(145deg, rgba(255,255,255,.24), rgba(167,174,211,.28));
+  border-color: rgba(255,255,255,.54);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 18px 48px rgba(91,99,145,.16);
+}
+
+.save-top,
+.button-secondary {
+  background: rgba(167,174,211,.32);
+  border-color: rgba(255,255,255,.52);
+}
+
+.topbar {
+  box-shadow: 0 8px 30px rgba(91,99,145,.08);
+}
+
+.countdown strong {
+  text-shadow: 0 0 14px rgba(255,240,201,.18);
+}
+
+
+/* V1.1.2 – Deep Pastel Night */
+.date-card {
+  background:
+    linear-gradient(145deg, rgba(197,212,235,.16), rgba(31,49,80,.42)) !important;
+  border-color: rgba(240,217,166,.56) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 18px 48px rgba(5,14,27,.24) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.save-top,
+.button-secondary {
+  background: rgba(31,49,80,.44) !important;
+  border-color: rgba(240,217,166,.54) !important;
+}
+
+.topbar {
+  box-shadow: 0 8px 30px rgba(5,14,27,.12);
+}
+
+.countdown strong {
+  text-shadow: 0 0 14px rgba(255,240,201,.18);
+}
+
+.message p,
+.calendar-note {
+  text-shadow: 0 1px 10px rgba(5,14,27,.16);
 }
